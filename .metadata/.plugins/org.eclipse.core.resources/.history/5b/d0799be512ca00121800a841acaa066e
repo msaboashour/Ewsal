@@ -1,0 +1,46 @@
+package hend.wifi;
+
+import java.util.HashMap;
+import java.util.List;
+
+import android.app.Activity;
+import android.content.Context;
+import android.net.wifi.ScanResult;
+import android.net.wifi.WifiManager;
+import android.os.Bundle;
+import android.widget.Toast;
+
+public class MainActivity extends Activity {
+
+	List<ScanResult> wifiList;
+	WifiManager wifi;
+	Context mContext = this;
+	HashMap<String, Integer> wifiHash = new HashMap<String, Integer>();
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
+		
+	}
+
+	public void scanWifi() {
+		wifi = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+		boolean isWorking = wifi.startScan();
+		if (isWorking) {
+			wifiList = wifi.getScanResults();
+			for (int i = 0; i < wifiList.size(); i++) {
+				ScanResult result = wifiList.get(i);
+				if(result.SSID.equalsIgnoreCase("iti_students")){
+					
+					int currentValue = (Integer)wifiHash.get(result.BSSID);
+					int updatedValue = currentValue + result.level;
+					wifiHash.put(result.BSSID, updatedValue);
+				}
+			}
+		} else {
+			Toast.makeText(mContext, "Wifi is not working", 3000).show();
+		}
+	}
+
+}

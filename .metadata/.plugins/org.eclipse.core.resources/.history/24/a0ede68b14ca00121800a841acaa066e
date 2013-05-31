@@ -1,0 +1,78 @@
+package hend.wifi;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import android.app.Activity;
+import android.content.Context;
+import android.net.wifi.ScanResult;
+import android.net.wifi.WifiManager;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.widget.Toast;
+
+public class MainActivity extends Activity {
+
+	List<ScanResult> wifiList;
+	WifiManager wifi;
+	Context mContext = this;
+	HashMap<String, LevelCounter> wifiHash = new HashMap<String, LevelCounter>();
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
+		
+		Worker worker = new Worker();
+		worker.execute();
+		
+		Timer timer = new Timer();
+		TimerTask task = new TimerTask() {
+			@Override
+			public void run() {
+				
+			}
+		};
+		timer.schedule(task, 4000);
+	}
+
+	private class Worker extends AsyncTask<Void, Void, Void> {
+
+		@Override
+		protected Void doInBackground(Void... params) {
+			while (true) {
+				scanWifi();
+			}
+		}
+	}
+
+	public void scanWifi() {
+		wifi = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+		boolean isWorking = wifi.startScan();
+		if (isWorking) {
+			wifiList = wifi.getScanResults();
+			for (int i = 0; i < wifiList.size(); i++) {
+				ScanResult result = wifiList.get(i);
+				if (result.SSID.equalsIgnoreCase("iti_students")) {
+
+					LevelCounter level = (LevelCounter) wifiHash
+							.get(result.BSSID);
+					if (level == null) {
+						level = new LevelCounter();
+						level.count = 1;
+						level.level = result.level;
+						wifiHash.put(result.BSSID, level);
+					} else {
+						level.count = level.count + 1;
+						level.level = level.level + result.level;
+					}
+				}
+			}
+		} else {
+			Toast.makeText(mContext, "Wifi is not working", 3000).show();
+		}
+	}
+
+}

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename compilation unit &apos;hend.wifi.Level.java&apos; to &apos;LevelCounter.java&apos;&#x0A;- Original project: &apos;WifiTest&apos;&#x0A;- Original element: &apos;hend.wifi.Level.java&apos;&#x0A;- Renamed element: &apos;hend.wifi.LevelCounter.java&apos;" description="Rename compilation unit &apos;Level.java&apos;" flags="2" id="org.eclipse.jdt.ui.rename.compilationunit" input="/src&lt;hend.wifi{Level.java" name="LevelCounter.java" references="false" stamp="1370019456177" version="1.0"/>
+</session>

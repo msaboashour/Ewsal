@@ -1,0 +1,7 @@
+package hend.wifi;
+
+public class Level {
+	int level;
+	int count;
+
+}
